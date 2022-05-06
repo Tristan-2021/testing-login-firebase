@@ -57,58 +57,33 @@ setupCloudFirestoreMocks([Callback? customHandlers]) async {
 
 void main() {
   late Users _users;
-  // ignore: unused_local_variable
-//  late final MockBlocExmaple mockexample;
+
   late final MockLogincubit mockLogincubit;
 
   setupCloudFirestoreMocks();
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    // Timer(const Duration(milliseconds: 100), () async {
-    // });
+
     await Firebase.initializeApp();
     await getInyecionDependecies();
 
     _users = MockUsers();
     mockLogincubit = MockLogincubit();
-    // when(() => _reposiAuthService.user).thenAnswer((_) {
-    //   return const Stream.empty();
-    // });
-    //  when(() => _users. )
   });
   group('test MyApp', () {
     testWidgets('render Appview', (tester) async {
-      await tester.pumpWidget(
-          const MyApps(
-              //  reposiAuthService: _reposiAuthService,
-              ),
-          const Duration(seconds: 5));
+      await tester.pumpWidget(const MyApps(), const Duration(seconds: 5));
       await tester.pump(const Duration(seconds: 5));
 
-      //  await tester.pumpAndSettle(const Duration(seconds: 3));
       expect(find.byType(MyApps), findsOneWidget);
     });
   });
 
   group('test ViewApp', () {
-    // setUp(() {
-    //   _users = MockUsers();
-    //   mockLogincubit = MockLogincubit();
-
-    //   _reposiAuthService = MockReposiAuthService();
-    // });
-
     testWidgets('renders Appview', (tester) async {
       //Todo:opcional si queires pobrar también el Bloclistener
-      // whenListen(
-      //     mockexample,
-      //     Stream.fromIterable([
-      //       const BlocexampleState(),
-      //       const BlocexampleState(
-      //           statusAuth: Page2Status.NoAthenticate, users: isers)
-      //     ]));
-      //  when(() => mockexample.state).thenReturn(BlocexampleState(users: _users));
+
       when(() => mockLogincubit.state)
           .thenReturn(LoginusersState(usaurio: _users));
       await tester.pumpWidget(BlocProvider<LoginusersCubit>(
