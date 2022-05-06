@@ -3,13 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
-  void onEvent(Bloc bloc, Object? event) {
-    log('event $event ');
-
-    super.onEvent(bloc, event);
-  }
-
-  @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     log('error: $error');
     super.onError(bloc, error, stackTrace);
