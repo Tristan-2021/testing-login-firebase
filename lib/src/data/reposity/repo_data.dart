@@ -18,20 +18,11 @@ class LoginRepoDomainImpl implements RepositiLogin {
 
   @override
   Stream<Either<Failure, Users>> getUsercurrent() {
-    // return _firebaseremotelogin.getUsercurrent().asyncMap((event) async {
-    //   print('eventopoooooooooooooooooooo ${network.isConnect}');
-    //   if (event.menssage == 'null') {
-    //     return const Left(
-    //         ServerFailure(message: 'Error, No estás Autenticado'));
-    //   } else {
-    //     return Right(event);
-    //   }
-    // });
-
     if (network.isConnect) {
       return _firebaseremotelogin.getUsercurrent().map((event) {
         if (event.menssage == 'null') {
-          return const Left(Failure(message: 'Error, No estás Autenticado'));
+          return const Left(
+              Failure(message: 'Hey bienvenido, debes autenticarte'));
         } else {
           return Right(event);
         }
