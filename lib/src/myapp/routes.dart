@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../presentation/bloc_create_acount/view/create_acount.dart';
 import '../presentation/bloc_login/view/splas_cream.dart';
-import '../presentation/view/bienvenido.dart';
-import '../presentation/view/otherview.dart';
+import '../presentation/pages/bienvenido.dart';
+import '../presentation/pages/otherview.dart';
 
 class Routes {
   static Route<dynamic> get(RouteSettings settings) {

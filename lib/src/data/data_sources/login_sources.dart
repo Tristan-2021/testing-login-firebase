@@ -7,7 +7,7 @@ abstract class LoginfirebaseRemoteAbstr {
   Stream<UserModel> getUsercurrent();
   Future<void> getIngresarAcount(
       {required String email, required String pasword});
-  String get name;
+
   Future<void> getCreateAcount(
       {required String email, required String pasword});
   Future<void> signOut();
@@ -16,7 +16,6 @@ abstract class LoginfirebaseRemoteAbstr {
 class FirebaseDataLoginImpl extends LoginfirebaseRemoteAbstr {
   late final FirebaseAuth firebaseAuth;
 
-  late String _user;
   FirebaseDataLoginImpl({
     required this.firebaseAuth,
   });
@@ -40,18 +39,12 @@ class FirebaseDataLoginImpl extends LoginfirebaseRemoteAbstr {
   Stream<UserModel> getUsercurrent() {
     return firebaseAuth.authStateChanges().map((event) {
       try {
-        _user = event?.uid ?? '';
         return UserModel(
             email: event!.email!, id: event.uid, menssage: 'autenticated');
       } catch (e) {
         return const UserModel(email: '', id: '', menssage: 'null');
       }
     });
-  }
-
-  @override
-  String get name {
-    return _user;
   }
 
   @override
