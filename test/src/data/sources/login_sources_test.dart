@@ -8,8 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_login/src/data/model/users_model.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-const _mockFirebaseUserUid = 'mock-uid';
-const _mockFirebaseUserEmail = 'mock-email';
+const mockFirebaseUserUid = 'mock-test-uid';
+const mockFirebaseUserEmail = 'mock-test-email';
 
 class MockLoginfirebaseRemoteAbstr extends Mock
     implements FirebaseDataLoginImpl {}
@@ -28,8 +28,8 @@ class MockCredentialGoogleAuth extends Mock implements GoogleAuthCredential {}
 
 void main() {
   late final LoginfirebaseRemoteAbstr firebaseDataLoginImpl;
-  const testPassword = '1214dqwawa';
-  const testemail = 'testin@gmail.com';
+  const testPassword = 'd231q12wawa';
+  const testemail = 'testinmock@gmail.com';
 
   late final MockFirebaseAuth mockFirebaseAuth;
   setUpAll(() {
@@ -40,28 +40,28 @@ void main() {
   });
   const usersNull = UserModel(email: '', id: '', menssage: 'null');
   const uesrs = UserModel(
-      id: _mockFirebaseUserUid,
-      email: _mockFirebaseUserEmail,
+      id: mockFirebaseUserUid,
+      email: mockFirebaseUserEmail,
       menssage: 'autenticated');
 
-  group('Test Data-Sources getUsercurrent', () {
-    test('should return Users valid', () async {
+  group('test the functionality of the getUserCurrent method', () {
+    test('should return a user valid', () async {
       final mockFirebaseUser = MockFirebaseUser();
-      when(() => mockFirebaseUser.email).thenReturn(_mockFirebaseUserEmail);
-      when(() => mockFirebaseUser.uid).thenReturn(_mockFirebaseUserUid);
+      when(() => mockFirebaseUser.email).thenReturn(mockFirebaseUserEmail);
+      when(() => mockFirebaseUser.uid).thenReturn(mockFirebaseUserUid);
 
       when(() => mockFirebaseAuth.authStateChanges())
           .thenAnswer((invocation) => Stream.value(mockFirebaseUser));
+      var s = firebaseDataLoginImpl.getUsercurrent();
 
-      await expectLater(firebaseDataLoginImpl.getUsercurrent(),
-          emitsInOrder(const <UserModel>[uesrs]));
+      expectLater(s, emitsInOrder(const <UserModel>[uesrs]));
     });
 
     test('should return Users invalid', () async {
       when(() => mockFirebaseAuth.authStateChanges())
           .thenAnswer((invocation) => Stream.value(null));
 
-      await expectLater(firebaseDataLoginImpl.getUsercurrent(),
+      expectLater(firebaseDataLoginImpl.getUsercurrent(),
           emitsInOrder(const <UserModel>[usersNull]));
     });
   });
