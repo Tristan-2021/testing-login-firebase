@@ -10,7 +10,6 @@ class LoginRepoDomainImpl implements RepositiLogin {
   late final LoginfirebaseRemoteAbstr _firebaseremotelogin;
   late final Network network;
 
-  // late StreamSubscription<Either<Failure, Users>> _streamSubscription;
   LoginRepoDomainImpl(
     this._firebaseremotelogin,
     this.network,
@@ -20,10 +19,14 @@ class LoginRepoDomainImpl implements RepositiLogin {
   Stream<Either<Failure, Users>> getUsercurrent() {
     if (network.isConnect) {
       return _firebaseremotelogin.getUsercurrent().map((event) {
+        print('evento $event');
+
         if (event.menssage == 'null') {
           return const Left(
               Failure(message: 'Hey bienvenido, debes autenticarte'));
         } else {
+          print('evento $event');
+
           return Right(event);
         }
       });

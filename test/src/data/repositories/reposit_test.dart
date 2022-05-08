@@ -8,6 +8,7 @@ import 'package:test_login/src/core/failure/failure.dart';
 import 'package:test_login/src/data/data_sources/login_sources.dart';
 import 'package:test_login/src/data/model/users_model.dart';
 import 'package:test_login/src/data/reposity/repo_data.dart';
+import 'package:test_login/src/domain/entity/users.dart';
 
 class MockLoginfirebaseRemoteAbstr extends Mock
     implements LoginfirebaseRemoteAbstr {}
@@ -15,6 +16,8 @@ class MockLoginfirebaseRemoteAbstr extends Mock
 class MockNetwork extends Mock implements Network {}
 
 void main() {
+  StreamSubscription<Either<Failure, Users>>? _streamSubscription;
+
   const testPassword = '1214dqwawa';
   const testemail = 'testin@gmail.com';
   // ignore: unused_local_variable
@@ -23,6 +26,8 @@ void main() {
   late final LoginRepoDomainImpl loginRepoDomainImpl;
   //late StreamSubscription<Either<Failure, Users>> _streamSubscription;
   const uesrs = UserModel(
+      email: 'event!.email!', id: 'event.uid', menssage: 'autenticated');
+  const usuario1 = UserModel(
       email: 'event!.email!', id: 'event.uid', menssage: 'autenticated');
   callWhenUser() {
     when(() => mockLoginfirebaseRemoteAbstr.getCreateAcount(
@@ -41,13 +46,15 @@ void main() {
   });
 
   group('should return remtoe data when the call remote darta soruces   ', () {
-    test('should return Users null when not contection internet', () async {
+    test('should return message failure  when not contection internet',
+        () async {
       when(() => mockNetwork.isConnect).thenAnswer((_) => false);
       when(() => mockLoginfirebaseRemoteAbstr.getUsercurrent()).thenAnswer(
           (_) => Stream.value(
               const UserModel(email: '', id: '', menssage: 'null')));
 
-      loginRepoDomainImpl.getUsercurrent().listen((event) {
+      _streamSubscription =
+          loginRepoDomainImpl.getUsercurrent().listen((event) {
         verify(() => mockLoginfirebaseRemoteAbstr.getUsercurrent()).called(1);
         verify(() => mockNetwork.isConnect).called(1);
         expect(event, const Left(Failure(message: 'No Tienes Internet')));
@@ -62,7 +69,8 @@ void main() {
           (_) => Stream.value(
               const UserModel(email: '', id: '', menssage: 'null')));
 
-      loginRepoDomainImpl.getUsercurrent().listen((event) {
+      _streamSubscription =
+          loginRepoDomainImpl.getUsercurrent().listen((event) {
         //verificamos que se ha llamado una sola vez
         verify(() => mockLoginfirebaseRemoteAbstr.getUsercurrent()).called(1);
         verify(() => mockNetwork.isConnect).called(1);
@@ -80,16 +88,22 @@ void main() {
       when(() => mockNetwork.isConnect).thenAnswer((_) => true);
       when(() => mockLoginfirebaseRemoteAbstr.getUsercurrent())
           .thenAnswer((_) => Stream.value(uesrs));
-
-      loginRepoDomainImpl.getUsercurrent().listen((event) {
-        verify(() => mockLoginfirebaseRemoteAbstr.getUsercurrent()).called(1);
+      _streamSubscription =
+          loginRepoDomainImpl.getUsercurrent().listen((event) {
         verify(() => mockNetwork.isConnect).called(1);
+        verify(() => mockLoginfirebaseRemoteAbstr.getUsercurrent()).called(1);
         event.fold((l) {}, (r) {
-          expect(event, const Right(uesrs));
+          print('testung $event');
+
+          expect(event, const Right(usuario1));
         });
       });
     });
+    tearDown(() {
+      _streamSubscription?.cancel();
+    });
   });
+
   group('CreateAcoutn Users', () {
     test('User created successfully', () async {
       when(() => mockNetwork.isConnect).thenAnswer((_) => true);
@@ -101,9 +115,9 @@ void main() {
       expect(
           result, equals(const Right('Se ha creado su cuenta exitosamente')));
     });
-    // Todo: Hay varios escenarios de en las que FirebasAtuhException maneja
+    // Todo: Hay varios escenarios en las que FirebasAtuhException maneja las excepciones
     // Todo: solo simulados  el "email-already-in-use" si gusta puede probar
-    // Todo: los otros escenarios de error
+    // Todo: los otros escenarios fallidos
     test('no user created yet become email-already-in-use', () async {
       when(() => mockNetwork.isConnect).thenAnswer((_) => true);
       when(() => mockLoginfirebaseRemoteAbstr.getCreateAcount(

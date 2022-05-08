@@ -1,6 +1,6 @@
 # test_login
 
-A project that serves as a guide for those who need to understand how clean architecture works and why it is important to add both unit tests and Widgets
+A project that serves as a guide for those who need to understand how clean architecture works and why it is important to add both unit tests and testWidgets
 
 ## Getting Started
 

@@ -34,22 +34,6 @@ class LoginusersCubit extends Cubit<LoginusersState> {
             ingreso: true));
       });
     });
-    // _streamSubscriptions = _reposiAuthService.user.listen((event) async {
-    //   // var evenrs = event.id.isNotEmpty ? Users.ingresando : Users.empty;
-
-    //   if (event.id.isNotEmpty) {
-    //     emit(state.copywith(
-    //         status: Auth2Status.Athenticate,
-    //         usaurio: event,
-    //         mensaje: event.message,
-    //         ingreso: true));
-    //   }
-    //   emit(state.copywith(
-    //       status: Auth2Status.NoAthenticate,
-    //       usaurio: Users.empty,
-    //       mensaje: event.message,
-    //       ingreso: false));
-    // });
   }
 
   Future<void> isIngresar(String email, String pasword) async {
